@@ -1,5 +1,6 @@
 # trabalho1 API
 
-Alunos: Francisco Ibargoyen Rech (frrech), Dmitri Blorow (dmitriblorow)
+Alunos: Francisco Ibargoyen Rech (frrech), Dimitri Blorow (dimitriblorow)
 Trabalho de Desenvolvimento de Serviços e APIs. 
-O tema escollhido foi de Cantina monetizada.
+
+O tema escolhido foi de Cantina monetizada.

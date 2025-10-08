@@ -1,0 +1,14 @@
+{
+  "name": "trabalho1_api",
+  "version": "1.0.0",
+  "description": "API para gerenciamento de cantina",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Francisco Rech, Dimitri Blorow",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

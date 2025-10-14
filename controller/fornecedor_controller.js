@@ -6,7 +6,7 @@ function createFornecedor(req, res) {
         const newFornecedor = fornecedor_service.createFornecedor(cnpj, nome, telefone);
         res.status(201).json(newFornecedor);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 
@@ -15,7 +15,7 @@ function createFornecedor(req, res) {
         const fornecedores = fornecedor_service.getAllFornecedores();
         res.status(200).json(fornecedores);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 
@@ -25,7 +25,7 @@ function getFornecedorById(req, res) {
         const fornecedor = fornecedor_service.getFornecedorById(id);
         res.status(200).json(fornecedor);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 
@@ -36,7 +36,7 @@ function getFornecedorById(req, res) {
         const updatedFornecedor = fornecedor_service.updateFornecedor(id, cnpj, nome, telefone);
         res.status(200).json(updatedFornecedor);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 
@@ -46,7 +46,7 @@ function deleteFornecedor(req, res) {
         fornecedor_service.deleteFornecedor(id);
         res.status(204).send();
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 

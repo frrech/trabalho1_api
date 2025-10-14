@@ -14,10 +14,6 @@ function createConta(cliente, saldo){
     contas.push(Conta(autoIncrementId++, newCliente, saldo));
 }
 
-function getAllContas(){
-    return contas;
-}
-
 function findContaByIndex(id){
     return contas.find(conta => conta.id === id);
 }
@@ -51,7 +47,6 @@ function depositAmount(id, valor){
 
 modules.exports = {
     createConta,
-    getAllContas,
     findContaByIndex,
     updateConta,
     deleteConta,

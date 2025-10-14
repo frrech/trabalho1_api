@@ -6,7 +6,7 @@ async function createCliente(req, res) {
         const newCliente = cliente_service.createCliente(nome, email, matricula);
         res.status(201).json(newCliente);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 
@@ -15,7 +15,7 @@ async function getAllClientes(req, res) {
         const clientes = cliente_service.getAllClientes();
         res.status(200).json(clientes);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 
@@ -25,7 +25,7 @@ async function getClienteById(req, res) {
         const cliente = cliente_service.getClienteById(id);
         res.status(200).json(cliente);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 
@@ -33,10 +33,10 @@ async function updateCliente(req, res) {
     try {
         const { id } = req.params;
         const { nome, email, matricula } = req.body;
-        const updatedCliente = cliente_service.updateCliente(id, nome, email, matricula);
+        const updatedCliente = cliente_service.updateCliente(cliente);
         res.status(200).json(updatedCliente);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 
@@ -46,7 +46,7 @@ async function deleteCliente(req, res) {
         cliente_service.deleteCliente(id);
         res.status(204).send();
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        res.status(error.id).json({ error: error.message });
     }
 }
 

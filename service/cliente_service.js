@@ -1,7 +1,7 @@
 const clienteRepository = require('../repository/cliente_repository');
 
-function createCliente(nome, email, matricula){
-    if(!nome || !email || !matricula){
+function createCliente(cliente){
+    if(!cliente || !cliente.nome || !cliente.email || !cliente.matricula){
         throw new Error("Nome, email e matrícula são obrigatórios.");
     }
     return clienteRepository.createCliente(nome, email, matricula);

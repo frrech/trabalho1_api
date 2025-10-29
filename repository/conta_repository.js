@@ -22,6 +22,7 @@ function updateConta(id, conta){
     const c = findContaByIndex(id);
     if(c){
         c = conta;
+        c.id = id;
         return true;
     }
     return false;
@@ -45,7 +46,7 @@ function depositAmount(id, valor){
     return false;
 }
 
-modules.exports = {
+module.exports = {
     createConta,
     findContaByIndex,
     updateConta,

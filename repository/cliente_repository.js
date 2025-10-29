@@ -9,9 +9,9 @@ class Cliente{
 let autoIncrementId = 1;
 const clientes = [];
 function createCliente(cliente){
-    const cliente = new Cliente(autoIncrementId++, cliente.nome, cliente.email, cliente.matricula);
-    clientes.push(cliente);
-    return cliente;
+    const cliente_novo = new Cliente(autoIncrementId++, cliente.nome, cliente.email, cliente.matricula);
+    clientes.push(cliente_novo);
+    return cliente_novo;
 
 }
 

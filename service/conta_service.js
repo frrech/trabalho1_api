@@ -47,7 +47,7 @@ function updateConta(id, conta){
     if (updated === null || updated === undefined) {
         throw { id: 404, message: "Conta não encontrada." };
     }
-    return updated;
+    return contaRepository.updateConta(id, conta);
 }
 function deleteConta(id){
     if(!id || id <= 0){

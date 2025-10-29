@@ -1,4 +1,4 @@
-const contaService = require('../services/conta_service');
+const contaService = require('../service/conta_service');
 
 async function createConta(req, res) {
     try {

@@ -6,6 +6,6 @@ router.post('/', contaController.createConta);
 router.get('/:id', contaController.getContaById);
 router.put('/:id', contaController.updateConta);
 router.delete('/:id', contaController.deleteConta);
-router.post('/:id/depositar', contaController.depositAmount);
+router.post('/depositar/:id', contaController.depositAmount);
 
 module.exports = router;

@@ -23,7 +23,7 @@ async function getContaById(req, res) {
 
 async function updateConta(req, res) {
     try {
-        const id = parseInt(req.params.id);
+        const {id} = req.params;
         const contaData = req.body;
         const updatedConta = contaService.updateConta(id, contaData);
         res.status(200).json(updatedConta);

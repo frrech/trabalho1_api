@@ -11,7 +11,7 @@ let contas = [];
 
 function createConta(cliente, saldo){
     const newCliente = clienteRepository.createCliente(cliente);
-    contas.push(Conta(autoIncrementId++, newCliente, saldo));
+    return contas.push(new Conta(autoIncrementId++, newCliente, saldo));
 }
 
 function findContaByIndex(id){
@@ -22,14 +22,13 @@ function updateConta(id, conta){
     const c = findContaByIndex(id);
     if(c){
         c = conta;
-        c.id = id;
         return true;
     }
     return false;
 }
 
 function deleteConta(id){
-    const target = contas.findIndex(id);
+    const target = contas.findContaByIndex(id);
     if(contas[target]){
         contas.splice(target, 1);
         return true;

@@ -4,17 +4,16 @@ async function createConta(req, res) {
     try {
         const cliente = req.body.cliente;
         const saldo = req.body.saldo;
-        const newConta = contaService.createConta(cliente, saldo);
+        const newConta = await contaService.createConta(cliente, saldo);
         res.status(201).json(newConta);
     } catch (error) {
         res.status(error.id || 500).json({ message: error.message || "Erro interno do servidor." });
     }
 }
 
-async function getContaById(req, res) {
+async function getAllContas(req, res) {
     try {
-        const id = parseInt(req.params.id);
-        const conta = contaService.findContaByIndex(id);
+        const conta = contaService.getAllContas();
         res.status(200).json(conta);
     } catch (error) {
         res.status(error.id || 500).json({ message: error.message || "Erro interno do servidor." });
@@ -55,7 +54,7 @@ async function depositAmount(req, res) {
 
 module.exports = {
     createConta,
-    getContaById,
+    getAllContas,
     updateConta,
     deleteConta,
     depositAmount

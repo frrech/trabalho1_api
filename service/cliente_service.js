@@ -4,7 +4,7 @@ function createCliente(cliente){
     if(!cliente || !cliente.nome || !cliente.email || !cliente.matricula){
         throw {id: 400, message: "Nome, email e matrícula são obrigatórios."};
     }
-    return clienteRepository.createCliente(nome, email, matricula);
+    return clienteRepository.createCliente(cliente);
 }
 
 function getAllClientes(){
@@ -22,8 +22,8 @@ function getClienteById(id){
     return cliente;
 }
 
-function updateCliente(cliente){
-    if(!cliente || !cliente.id || !cliente.nome || !cliente.email || !cliente.matricula){
+function updateCliente(id, cliente){
+    if(!cliente || !cliente.id || !cliente.nome || !cliente.email || !cliente.matricula || !id){
         throw {id: 400, message: "Nome, email e matrícula são obrigatórios."};
     }
     const updated = clienteRepository.updateCliente(id, nome, email, matricula);

@@ -23,12 +23,12 @@ function getClienteById(id){
     return clientes.find(cliente => cliente.id === id);
 }
 
-function updateCliente(id, nome, email, matricula){
-    const cliente = getClienteById(id);
-    if(cliente){
-        cliente.nome = nome;
-        cliente.email = email;
-        cliente.matricula = matricula;
+function updateCliente(id, cliente){
+    const c = getClienteById(id);
+    if(c){
+        c.nome = cliente.nome;
+        c.email = cliente.email;
+        c.matricula = cliente.matricula;
         return true;
     }
     return false;

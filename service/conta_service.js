@@ -14,19 +14,16 @@ function isValidSaldo(saldo) {
         saldo >= 0;
 }
 
-function createConta(cliente, saldo){
+async function createConta(cliente, saldo){
     if (!isValidCliente(cliente) || !isValidSaldo(saldo)) {
         throw { id: 401, message: "Campos de cliente e saldo devem ser preenchidos propriamente." };
     }
-    contaRepository.createConta(cliente, saldo);
+    await contaRepository.createConta(cliente, saldo);
 }
 
 
-function findContaByIndex(id){
-    if(!id || id <= 0){
-        throw { id: 401, message: "ID inválido." }
-    }
-    const c = contaRepository.findContaByIndex(id);
+function getAllContas(){
+    const c = contaRepository.getAllContas();
     if(!c){
         throw {id: 404, message: "Conta não encontrada."}
     }
@@ -75,7 +72,7 @@ function depositAmount(id, valor){
 }
 module.exports = {
     createConta,
-    findContaByIndex,
+    getAllContas,
     updateConta,
     deleteConta,
     depositAmount

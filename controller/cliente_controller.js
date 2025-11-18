@@ -2,8 +2,7 @@ const cliente_service = require('../service/cliente_service');
 
 async function createCliente(req, res) {
     try {
-        const { nome, email, matricula } = req.body;
-        const newCliente = cliente_service.createCliente(nome, email, matricula);
+        const newCliente = cliente_service.createCliente(req.body);
         res.status(201).json(newCliente);
     } catch (error) {
         res.status(error.id).json({ error: error.message });
@@ -32,8 +31,7 @@ async function getClienteById(req, res) {
 async function updateCliente(req, res) {
     try {
         const { id } = req.params;
-        const { nome, email, matricula } = req.body;
-        const updatedCliente = cliente_service.updateCliente(cliente);
+        const updatedCliente = cliente_service.updateCliente(id, req.body);
         res.status(200).json(updatedCliente);
     } catch (error) {
         res.status(error.id).json({ error: error.message });

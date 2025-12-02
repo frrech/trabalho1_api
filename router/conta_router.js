@@ -59,7 +59,7 @@ router.post("/", contaController.createConta);
  *       500:
  *         description: Server error
  */
-router.get("/:id", contaController.getContaById);
+router.get("/:id", contaController.getAllContas);
 
 /**
  * @swagger

@@ -82,6 +82,49 @@ const options = {
                             description: 'Supplier phone number'
                         }
                     }
+                },
+                Produto: {
+                    type: 'object',
+                    required: ['nome', 'categoriaId', 'fornecedorNome', 'preco'],
+                    properties: {
+                        id: { type: 'integer', description: 'Product ID' },
+                        nome: { type: 'string', description: 'Product name' },
+                        categoriaId: { type: 'integer', description: 'Category ID' },
+                        fornecedorNome: { type: 'string', description: 'Supplier name' },
+                        preco: { type: 'number', format: 'float', description: 'Product price' }
+                    }
+                },
+                Categoria: {
+                    type: 'object',
+                    required: ['nome'],
+                    properties: {
+                        id: { type: 'integer', description: 'Category ID' },
+                        nome: { type: 'string', description: 'Category name' },
+                        descricao: { type: 'string', description: 'Category description' }
+                    }
+                },
+                Venda: {
+                    type: 'object',
+                    required: ['clienteNome', 'itens'],
+                    properties: {
+                        id: { type: 'integer', description: 'Sale ID' },
+                        clienteNome: { type: 'string', description: 'Client name' },
+                        itens: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    produtoId: { type: 'integer' },
+                                    nomeProduto: { type: 'string' },
+                                    quantidade: { type: 'integer' },
+                                    precoUnitario: { type: 'number', format: 'float' },
+                                    subtotal: { type: 'number', format: 'float' }
+                                }
+                            }
+                        },
+                        dataHora: { type: 'string', format: 'date-time' },
+                        total: { type: 'number', format: 'float' }
+                    }
                 }
             }
         }
@@ -89,7 +132,10 @@ const options = {
     apis: [
         './router/cliente_router.js',
         './router/conta_router.js',
-        './router/fornecedor_router.js'
+        './router/fornecedor_router.js',
+        './router/produto_router.js',
+        './router/categoria_router.js',
+        './router/venda_router.js'
     ]
 };
 

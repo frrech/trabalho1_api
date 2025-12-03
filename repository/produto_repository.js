@@ -1,5 +1,4 @@
-const db = require('../db.js');
-const pool = db.pool || db;
+const pool = require('../db.js')
 
 
 class Produto {

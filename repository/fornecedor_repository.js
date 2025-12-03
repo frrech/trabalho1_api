@@ -1,5 +1,5 @@
 /* Cadastro de fornecedor: anota-se apenas o CNPJ, nome e telefone. */
-const { pool } = require('../db.js');
+const pool = require('../db.js')
 
 async function addFornecedor(cnpj, nome, telefone) {
     const query = 'INSERT INTO fornecedor (cnpj, nome, telefone) VALUES ($1, $2, $3) RETURNING *';
@@ -18,7 +18,7 @@ async function addFornecedor(cnpj, nome, telefone) {
 }
 
 async function getFornecedorById(id) {
-    const query = 'SELECT * FROM fornecedor WHERE id = $1';
+    const query = 'SELECT * FROM fornecedor WHERE id_fornecedor = $1';
     const values = [id];
     
     try {
@@ -26,7 +26,7 @@ async function getFornecedorById(id) {
         const result = await c.query(query, values);
         return result.rows[0];
     } catch (error) {
-        console.error('Error fetching fornecedor by id:', error);
+        console.error('Error fetching fornecedor by id_fornecedor:', error);
         throw error;
     } finally {
         c.release();
@@ -34,7 +34,7 @@ async function getFornecedorById(id) {
 }
 
 async function getAllFornecedores() {
-    const query = 'SELECT * FROM fornecedor ORDER BY id';
+    const query = 'SELECT * FROM fornecedor ORDER BY id_fornecedor';
     
     try {
         const c = await pool.connect();
@@ -49,7 +49,7 @@ async function getAllFornecedores() {
 }
 
 async function updateFornecedor(id, cnpj, nome, telefone) {
-    const query = 'UPDATE fornecedor SET cnpj = $1, nome = $2, telefone = $3 WHERE id = $4 RETURNING *';
+    const query = 'UPDATE fornecedor SET cnpj = $1, nome = $2, telefone = $3 WHERE id_fornecedor = $4 RETURNING *';
     const values = [cnpj, nome, telefone, id];
     
     try {
@@ -64,8 +64,8 @@ async function updateFornecedor(id, cnpj, nome, telefone) {
     }
 }
 
-async function deleteFornecedor(id) {
-    const query = 'DELETE FROM fornecedor WHERE id = $1 RETURNING *';
+async function deleteFornecedor(id_fornecedor) {
+    const query = 'DELETE FROM fornecedor WHERE id_fornecedor = $1 RETURNING *';
     const values = [id];
     
     try {

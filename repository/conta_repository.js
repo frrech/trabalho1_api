@@ -1,4 +1,4 @@
-const { pool } = require('../db.js');
+const pool = require('../db.js')
 
 async function createConta(cliente_id, saldo) {
     const query = 'INSERT INTO contas (cliente_id, saldo) VALUES ($1, $2) RETURNING *';

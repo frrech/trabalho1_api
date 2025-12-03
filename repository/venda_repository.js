@@ -1,6 +1,4 @@
-const db = require('../db.js');
-const pool = db.pool || db;
-
+const pool = require('../db.js')
 class Venda {
     constructor(id, clienteNome, itens, dataHora, total) {
         this.id = id;

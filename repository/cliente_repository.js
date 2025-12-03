@@ -1,7 +1,4 @@
-const db = require('../db.js');
-
-// Support both CommonJS and ESM-style export from db.js
-const pool = db.pool || db;
+const pool = require('../db.js')
 
 async function createCliente(cliente) {
     const query = 'INSERT INTO cliente (nome, email, matricula) VALUES ($1, $2, $3) RETURNING id AS id, nome, email, matricula';

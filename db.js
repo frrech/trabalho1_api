@@ -9,6 +9,10 @@ const pool = new pg.Pool({
     max: 20, // maximum number of clients in the pool
 });
 
+async function connect() {
+    return await pool.connect();
+}
+
 module.exports = {
-    pool
-};
+    connect
+}

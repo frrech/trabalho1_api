@@ -1,4 +1,5 @@
 const db = require('../db.js');
+const pool = db.pool || db;
 
 class Venda {
     constructor(id, clienteNome, itens, dataHora, total) {
@@ -13,57 +14,61 @@ class Venda {
 async function createVenda(clienteNome, itens, dataHora, total) {
     const sql = `INSERT INTO vendas (cliente_nome, itens, data_hora, total)
                  VALUES ($1, $2::jsonb, $3::timestamptz, $4)
-                 RETURNING id_venda, cliente_nome AS "clienteNome", itens, data_hora AS "dataHora", total`;
+                 RETURNING id_venda AS id, cliente_nome AS "clienteNome", itens, data_hora AS "dataHora", total`;
     const values = [
         clienteNome,
         JSON.stringify(itens),
         dataHora ? new Date(dataHora) : new Date(),
         parseFloat(total)
     ];
-    const client = await db.connect();
+    let client;
     try {
+        client = await pool.connect();
         const res = await client.query(sql, values);
         const r = res.rows[0];
         return new Venda(r.id, r.clienteNome, r.itens, r.dataHora, parseFloat(r.total));
     } finally {
-        client.release();
+        if (client) client.release();
     }
 }
 
 async function getAllVendas() {
-    const sql = `SELECT id_venda, cliente_nome AS "clienteNome", itens, data_hora AS "dataHora", total FROM vendas ORDER BY id_venda`;
-    const client = await db.connect();
+    const sql = `SELECT id_venda AS id, cliente_nome AS "clienteNome", itens, data_hora AS "dataHora", total FROM vendas ORDER BY id_venda`;
+    let client;
     try {
+        client = await pool.connect();
         const res = await client.query(sql);
         return res.rows.map(r => new Venda(r.id, r.clienteNome, r.itens, r.dataHora, parseFloat(r.total)));
     } finally {
-        client.release();
+        if (client) client.release();
     }
 }
 
 async function getVendaById(id) {
-    const sql = `SELECT id_venda, cliente_nome AS "clienteNome", itens, data_hora AS "dataHora", total FROM vendas WHERE id_venda = $1`;
-    const client = await db.connect();
+    const sql = `SELECT id_venda AS id, cliente_nome AS "clienteNome", itens, data_hora AS "dataHora", total FROM vendas WHERE id_venda = $1`;
+    let client;
     try {
-        const res = await client.query(sql, [parseInt(id)]);
+        client = await pool.connect();
+        const res = await client.query(sql, [parseInt(id, 10)]);
         if (res.rowCount === 0) return null;
         const r = res.rows[0];
         return new Venda(r.id, r.clienteNome, r.itens, r.dataHora, parseFloat(r.total));
     } finally {
-        client.release();
+        if (client) client.release();
     }
 }
 
 async function deleteVenda(id) {
-    const sql = `DELETE FROM vendas WHERE id_venda = $1 RETURNING id_venda, cliente_nome AS "clienteNome", itens, data_hora AS "dataHora", total`;
-    const client = await db.connect();
+    const sql = `DELETE FROM vendas WHERE id_venda = $1 RETURNING id_venda AS id, cliente_nome AS "clienteNome", itens, data_hora AS "dataHora", total`;
+    let client;
     try {
-        const res = await client.query(sql, [parseInt(id)]);
+        client = await pool.connect();
+        const res = await client.query(sql, [parseInt(id, 10)]);
         if (res.rowCount === 0) return null;
         const r = res.rows[0];
         return new Venda(r.id, r.clienteNome, r.itens, r.dataHora, parseFloat(r.total));
     } finally {
-        client.release();
+        if (client) client.release();
     }
 }
 

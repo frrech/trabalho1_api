@@ -2,7 +2,7 @@
 const { pool } = require('../db.js');
 
 async function addFornecedor(cnpj, nome, telefone) {
-    const query = 'INSERT INTO fornecedores (cnpj, nome, telefone) VALUES ($1, $2, $3) RETURNING *';
+    const query = 'INSERT INTO fornecedor (cnpj, nome, telefone) VALUES ($1, $2, $3) RETURNING *';
     const values = [cnpj, nome, telefone];
     
     try {
@@ -18,7 +18,7 @@ async function addFornecedor(cnpj, nome, telefone) {
 }
 
 async function getFornecedorById(id) {
-    const query = 'SELECT * FROM fornecedores WHERE id = $1';
+    const query = 'SELECT * FROM fornecedor WHERE id = $1';
     const values = [id];
     
     try {
@@ -34,7 +34,7 @@ async function getFornecedorById(id) {
 }
 
 async function getAllFornecedores() {
-    const query = 'SELECT * FROM fornecedores ORDER BY id';
+    const query = 'SELECT * FROM fornecedor ORDER BY id';
     
     try {
         const c = await pool.connect();
@@ -49,7 +49,7 @@ async function getAllFornecedores() {
 }
 
 async function updateFornecedor(id, cnpj, nome, telefone) {
-    const query = 'UPDATE fornecedores SET cnpj = $1, nome = $2, telefone = $3 WHERE id = $4 RETURNING *';
+    const query = 'UPDATE fornecedor SET cnpj = $1, nome = $2, telefone = $3 WHERE id = $4 RETURNING *';
     const values = [cnpj, nome, telefone, id];
     
     try {
@@ -65,7 +65,7 @@ async function updateFornecedor(id, cnpj, nome, telefone) {
 }
 
 async function deleteFornecedor(id) {
-    const query = 'DELETE FROM fornecedores WHERE id = $1 RETURNING *';
+    const query = 'DELETE FROM fornecedor WHERE id = $1 RETURNING *';
     const values = [id];
     
     try {

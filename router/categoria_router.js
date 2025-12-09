@@ -1,55 +1,53 @@
-const produtoController = require('../controller/produto_controller');
+const categoriaController = require('../controller/categoria_controller');
 const express = require('express');
 const router = express.Router();
 
 /**
  * @swagger
- * /produto:
+ * /categoria:
  *   post:
- *     summary: Create a new product
- *     tags: [Produtos]
+ *     summary: Create a new category
+ *     tags: [Categorias]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Produto'
+ *             $ref: '#/components/schemas/Categoria'
  *     responses:
  *       201:
- *         description: Product created
+ *         description: Category created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Produto'
- *       400:
- *         description: Bad request
+ *               $ref: '#/components/schemas/Categoria'
  */
-router.post('/', produtoController.createProduto);
+router.post('/', categoriaController.createCategoria);
 
 /**
  * @swagger
- * /produto:
+ * /categoria:
  *   get:
- *     summary: Get all products
- *     tags: [Produtos]
+ *     summary: Get all categories
+ *     tags: [Categorias]
  *     responses:
  *       200:
- *         description: List of products
+ *         description: List of categories
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Produto'
+ *                 $ref: '#/components/schemas/Categoria'
  */
-router.get('/', produtoController.getAllProdutos);
+router.get('/', categoriaController.getAllCategorias);
 
 /**
  * @swagger
- * /produto/{id}:
+ * /categoria/{id}:
  *   get:
- *     summary: Get a product by ID
- *     tags: [Produtos]
+ *     summary: Get a category by ID
+ *     tags: [Categorias]
  *     parameters:
  *       - in: path
  *         name: id
@@ -58,22 +56,20 @@ router.get('/', produtoController.getAllProdutos);
  *           type: integer
  *     responses:
  *       200:
- *         description: Product found
+ *         description: Category found
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Produto'
- *       404:
- *         description: Product not found
+ *               $ref: '#/components/schemas/Categoria'
  */
-router.get('/:id', produtoController.getProdutoById);
+router.get('/:id', categoriaController.getCategoriaById);
 
 /**
  * @swagger
- * /produto/{id}:
+ * /categoria/{id}:
  *   put:
- *     summary: Update a product
- *     tags: [Produtos]
+ *     summary: Update a category
+ *     tags: [Categorias]
  *     parameters:
  *       - in: path
  *         name: id
@@ -84,19 +80,19 @@ router.get('/:id', produtoController.getProdutoById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Produto'
+ *             $ref: '#/components/schemas/Categoria'
  *     responses:
  *       200:
- *         description: Product updated
+ *         description: Category updated
  */
-router.put('/:id', produtoController.updateProduto);
+router.put('/:id', categoriaController.updateCategoria);
 
 /**
  * @swagger
- * /produto/{id}:
+ * /categoria/{id}:
  *   delete:
- *     summary: Delete a product
- *     tags: [Produtos]
+ *     summary: Delete a category
+ *     tags: [Categorias]
  *     parameters:
  *       - in: path
  *         name: id
@@ -105,8 +101,8 @@ router.put('/:id', produtoController.updateProduto);
  *           type: integer
  *     responses:
  *       204:
- *         description: Product deleted
+ *         description: Category deleted
  */
-router.delete('/:id', produtoController.deleteProduto);
+router.delete('/:id', categoriaController.deleteCategoria);
 
 module.exports = router;

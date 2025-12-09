@@ -1,46 +1,87 @@
-class Cliente{
-    constructor(id, nome, email, matricula){
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.matricula = matricula;
+const pool = require('../db.js')
+
+async function createCliente(cliente) {
+    const query = 'INSERT INTO cliente (nome, email, matricula) VALUES ($1, $2, $3) RETURNING id AS id, nome, email, matricula';
+    const values = [cliente.nome, cliente.email, cliente.matricula];
+    let client;
+
+    try {
+        client = await pool.connect();
+        const result = await client.query(query, values);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error creating cliente:', error);
+        throw error;
+    } finally {
+        if (client) client.release();
     }
 }
-let autoIncrementId = 1;
-const clientes = [];
-function createCliente(cliente){
-    const cliente_novo = new Cliente(autoIncrementId++, cliente.nome, cliente.email, cliente.matricula);
-    clientes.push(cliente_novo);
-    return cliente_novo;
 
-}
+async function getAllClientes() {
+    const query = 'SELECT id AS id, nome, email, matricula FROM cliente ORDER BY id';
+    let client;
 
-function getAllClientes(){
-    return clientes;
-}
-
-function getClienteById(id){
-    return clientes.find(cliente => cliente.id === id);
-}
-
-function updateCliente(id, cliente){
-    const c = getClienteById(id);
-    if(c){
-        c.nome = cliente.nome;
-        c.email = cliente.email;
-        c.matricula = cliente.matricula;
-        return true;
+    try {
+        client = await pool.connect();
+        const result = await client.query(query);
+        return result.rows;
+    } catch (error) {
+        console.error('Error fetching clientes:', error);
+        throw error;
+    } finally {
+        if (client) client.release();
     }
-    return false;
 }
 
-function deleteCliente(id){
-    const index = clientes.findIndex(cliente => cliente.id === id);
-    if(index !== -1){
-        clientes.splice(index, 1);
-        return true;
+async function getClienteById(id) {
+    const query = 'SELECT id AS id, nome, email, matricula FROM cliente WHERE id = $1';
+    const values = [parseInt(id, 10)];
+    let client;
+
+    try {
+        client = await pool.connect();
+        const result = await client.query(query, values);
+        return result.rows[0] || null;
+    } catch (error) {
+        console.error('Error fetching cliente by id:', error);
+        throw error;
+    } finally {
+        if (client) client.release();
     }
-    return false;
+}
+
+async function updateCliente(id, cliente) {
+    const query = 'UPDATE cliente SET nome = $1, email = $2, matricula = $3 WHERE id = $4 RETURNING id';
+    const values = [cliente.nome, cliente.email, cliente.matricula, parseInt(id, 10)];
+    let client;
+
+    try {
+        client = await pool.connect();
+        const result = await client.query(query, values);
+        return result.rowCount > 0;
+    } catch (error) {
+        console.error('Error updating cliente:', error);
+        throw error;
+    } finally {
+        if (client) client.release();
+    }
+}
+
+async function deleteCliente(id) {
+    const query = 'DELETE FROM cliente WHERE id = $1';
+    const values = [parseInt(id, 10)];
+    let client;
+
+    try {
+        client = await pool.connect();
+        const result = await client.query(query, values);
+        return result.rowCount > 0;
+    } catch (error) {
+        console.error('Error deleting cliente:', error);
+        throw error;
+    } finally {
+        if (client) client.release();
+    }
 }
 
 module.exports = {

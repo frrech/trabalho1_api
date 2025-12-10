@@ -1,6 +1,6 @@
 const contaRepository = require('../repository/conta_repository');
 
-function isValidCliente(cliente) {
+function isValidClienteObject(cliente) {
     return cliente &&
         typeof cliente.nome === 'string' && cliente.nome.trim() !== '' &&
         typeof cliente.email === 'string' && cliente.email.trim() !== '' &&
@@ -15,61 +15,82 @@ function isValidSaldo(saldo) {
 }
 
 async function createConta(cliente, saldo){
-    if (!isValidCliente(cliente) || !isValidSaldo(saldo)) {
+    if (!isValidSaldo(saldo)) {
+        throw { id: 401, message: "Saldo inválido." };
+    }
+
+    let cliente_id = null;
+    if (typeof cliente === 'number' && cliente > 0) {
+        cliente_id = cliente;
+    } else if (cliente && typeof cliente.cliente_id === 'number' && cliente.cliente_id > 0) {
+        cliente_id = cliente.cliente_id;
+    } else {
+        if (isValidClienteObject(cliente)) {
+            throw { id: 401, message: "Envie cliente_id (número) para criar a conta ou adapte o serviço para criar o cliente primeiro." };
+        }
         throw { id: 401, message: "Campos de cliente e saldo devem ser preenchidos propriamente." };
     }
-    await contaRepository.createConta(cliente, saldo);
+
+    const created = await contaRepository.createConta(cliente_id, saldo);
+    return created;
 }
 
-
-function getAllContas(){
-    const c = contaRepository.getAllContas();
-    if(!c){
-        throw {id: 404, message: "Conta não encontrada."}
+async function getAllContas(){
+    const c = await contaRepository.getAllContas();
+    if (c == null) {
+        throw {id: 404, message: "Contas não encontradas."};
     }
     return c;
 }
 
-function updateConta(id, conta){
+async function updateConta(id, conta){
     if(!id || id <= 0){
         throw { id: 401, message: "ID inválido." }
     }
-    if (
-        !conta ||
-        !isValidCliente(conta.cliente) ||
-        !isValidSaldo(conta.saldo)
-    ) {
-        throw { id: 401, message: "Campos de cliente e saldo devem ser preenchidos propriamente." };
+
+    // accept either { cliente_id: number, saldo } or { cliente: { cliente_id: number }, saldo }
+    const cliente_id = (conta && typeof conta.cliente_id === 'number' && conta.cliente_id > 0)
+        ? conta.cliente_id
+        : (conta && conta.cliente && typeof conta.cliente.cliente_id === 'number' && conta.cliente.cliente_id > 0)
+            ? conta.cliente.cliente_id
+            : null;
+
+    if (cliente_id === null || !isValidSaldo(conta && conta.saldo)) {
+        throw { id: 401, message: "Campos de cliente_id (número) e saldo devem ser preenchidos propriamente." };
     }
-    if (updated === null || updated === undefined) {
+
+    const updated = await contaRepository.updateConta(id, { cliente_id, saldo: conta.saldo });
+    if (!updated) {
         throw { id: 404, message: "Conta não encontrada." };
     }
-    return contaRepository.updateConta(id, conta);
+    return updated;
 }
-function deleteConta(id){
+
+async function deleteConta(id){
     if(!id || id <= 0){
         throw { id: 401, message: "ID inválido." }
     }
-    const deleted = contaRepository.deleteConta(id);
+    const deleted = await contaRepository.deleteConta(id);
     if(!deleted){
         throw {id: 404, message: "Conta não encontrada."}
     }
     return deleted;
 }
 
-function depositAmount(id, valor){
+async function depositAmount(id, valor){
     if(!id || id <= 0){
         throw { id: 401, message: "ID inválido." }
     }
-    if(!valor || valor <= 0){
+    if(typeof valor !== 'number' || valor <= 0){
         throw { id: 401, message: "Valor inválido." }
     }
-    const deposited = contaRepository.depositAmount(id, valor);
+    const deposited = await contaRepository.depositAmount(id, valor);
     if(!deposited){
         throw {id: 404, message: "Conta não encontrada."}
     }
     return deposited;
 }
+
 module.exports = {
     createConta,
     getAllContas,

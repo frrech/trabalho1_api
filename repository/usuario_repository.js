@@ -2,13 +2,13 @@ const pool = require('../db.js');
 
 async function createUsuario(nomeCompleto, email, senha) {
     const query = `
-        INSERT INTO usuario (nomeCompleto, email, senha)
+        INSERT INTO usuario (nome, email, senha)
         VALUES ($1, $2, $3)
-        RETURNING id AS id, nomeCompleto, email, senha
+        RETURNING id_usuario AS id, nome, email, senha
     `;
 
     const values = [nomeCompleto, email, senha];
-    let client;
+    let client = null;
 
     try {
         client = await pool.connect();
@@ -24,13 +24,13 @@ async function createUsuario(nomeCompleto, email, senha) {
 
 async function getUsuarioByEmail(email) {
     const query = `
-        SELECT id AS id, nomeCompleto, email, senha
+        SELECT id_usuario AS id, nome, email, senha
         FROM usuario
         WHERE email = $1
     `;
 
     const values = [email];
-    let client;
+    let client = null;
 
     try {
         client = await pool.connect();
@@ -46,11 +46,11 @@ async function getUsuarioByEmail(email) {
 
 async function getAllUsuarios() {
     const query = `
-        SELECT id AS id, nomeCompleto, email, senha
+        SELECT id_usuario AS id, nome, email, senha
         FROM usuario
         ORDER BY id
     `;
-    let client;
+    let client = null;
 
     try {
         client = await pool.connect();
@@ -66,13 +66,13 @@ async function getAllUsuarios() {
 
 async function getUsuarioById(id) {
     const query = `
-        SELECT id AS id, nomeCompleto, email, senha
+        SELECT id_usuario AS id, nome, email, senha
         FROM usuario
-        WHERE id = $1
+        WHERE id_usuario = $1
     `;
 
     const values = [parseInt(id, 10)];
-    let client;
+    let client = null;
 
     try {
         client = await pool.connect();
@@ -89,11 +89,11 @@ async function getUsuarioById(id) {
 async function deleteUsuario(id) {
     const query = `
         DELETE FROM usuario
-        WHERE id = $1
+        WHERE id_usuario = $1
     `;
 
     const values = [parseInt(id, 10)];
-    let client;
+    let client = null;
 
     try {
         client = await pool.connect();

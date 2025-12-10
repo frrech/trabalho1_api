@@ -4,9 +4,9 @@ const pool = require('../db.js')
 async function addFornecedor(cnpj, nome, telefone) {
     const query = 'INSERT INTO fornecedor (cnpj, nome, telefone) VALUES ($1, $2, $3) RETURNING *';
     const values = [cnpj, nome, telefone];
-    
+    let c;
     try {
-        const c = await pool.connect();
+        c = await pool.connect();
         const result = await c.query(query, values);
         return result.rows[0];
     } catch (error) {
@@ -20,9 +20,9 @@ async function addFornecedor(cnpj, nome, telefone) {
 async function getFornecedorById(id) {
     const query = 'SELECT * FROM fornecedor WHERE id_fornecedor = $1';
     const values = [id];
-    
+    let c;
     try {
-        const c = await pool.connect();
+        c = await pool.connect();
         const result = await c.query(query, values);
         return result.rows[0];
     } catch (error) {
@@ -35,9 +35,9 @@ async function getFornecedorById(id) {
 
 async function getAllFornecedores() {
     const query = 'SELECT * FROM fornecedor ORDER BY id_fornecedor';
-    
+    let c;
     try {
-        const c = await pool.connect();
+        c = await pool.connect();
         const result = await c.query(query);
         return result.rows;
     } catch (error) {
@@ -51,10 +51,10 @@ async function getAllFornecedores() {
 async function updateFornecedor(id, cnpj, nome, telefone) {
     const query = 'UPDATE fornecedor SET cnpj = $1, nome = $2, telefone = $3 WHERE id_fornecedor = $4 RETURNING *';
     const values = [cnpj, nome, telefone, id];
-    
+    let c;
     try {
-        const c = await pool.connect();
-        const result = await pool.query(query, values);
+        c = await pool.connect();
+        const result = await c.query(query, values);
         return result.rows[0];
     } catch (error) {
         console.error('Error updating fornecedor:', error);
@@ -66,10 +66,10 @@ async function updateFornecedor(id, cnpj, nome, telefone) {
 
 async function deleteFornecedor(id_fornecedor) {
     const query = 'DELETE FROM fornecedor WHERE id_fornecedor = $1 RETURNING *';
-    const values = [id];
-    
+    const values = [id_fornecedor];
+    let c;
     try {
-        const c = await pool.connect();
+        c = await pool.connect();
         const result = await c.query(query, values);
         return result.rows[0];
     } catch (error) {

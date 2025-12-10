@@ -1,7 +1,8 @@
 const produtoRepository = require('../repository/produto_repository');
 const categoriaRepository = require('../repository/categoria_repository');
+const fornecedorRepository = require('../repository/fornecedor_repository');
 
-function createProduto(nome, categoriaId, fornecedorNome, preco) {
+async function createProduto(nome, categoriaId, fornecedorNome, preco) {
     if (!nome || nome.trim() === '') {
         const error = new Error("Nome do produto é obrigatório.");
         error.id = 400;
@@ -13,34 +14,48 @@ function createProduto(nome, categoriaId, fornecedorNome, preco) {
         throw error;
     }
 
-    // valida categoria existente
-    const categoria = categoriaRepository.getCategoriaById(categoriaId);
+    const cid = parseInt(categoriaId, 10);
+    if (isNaN(cid) || cid <= 0) {
+        const error = new Error("categoriaId inválido.");
+        error.id = 400;
+        throw error;
+    }
+
+    const categoria = await categoriaRepository.getCategoriaById(cid);
     if (!categoria) {
         const error = new Error("Categoria não encontrada.");
         error.id = 404;
         throw error;
     }
 
-    // valida fornecedor existente pelo nome (se desejar exigir existência do fornecedor)
-    // seu repositório de fornecedor tem getFornecedorById, getAllFornecedores e addFornecedor.
-    // aqui aceitamos fornecedorNome como string — opcionalmente verificamos se existe um fornecedor com esse nome.
-    const fornecedores = fornecedorRepository.getAllFornecedores();
-    const fornecedorExiste = fornecedores.some(f => f.nome === fornecedorNome);
+    // get fornecedores and normalize to array
+    const fornecedoresRaw = await fornecedorRepository.getAllFornecedores();
+    const fornecedores = Array.isArray(fornecedoresRaw)
+        ? fornecedoresRaw
+        : (fornecedoresRaw && Array.isArray(fornecedoresRaw.rows) ? fornecedoresRaw.rows : []);
+
+    if (!Array.isArray(fornecedores)) {
+        const error = new Error("Erro ao obter fornecedores.");
+        error.id = 500;
+        throw error;
+    }
+
+    const fornecedorExiste = fornecedores.some(f => f && f.nome === fornecedorNome);
     if (!fornecedorExiste) {
         const error = new Error("Fornecedor não encontrado (pelo nome).");
         error.id = 404;
         throw error;
     }
 
-    return produtoRepository.createProduto(nome, categoriaId, fornecedorNome, preco);
+    return await produtoRepository.createProduto(nome, cid, fornecedorNome, preco);
 }
 
-function getAllProdutos() {
-    return produtoRepository.getAllProdutos();
+async function getAllProdutos() {
+    return await produtoRepository.getAllProdutos();
 }
 
-function getProdutoById(id) {
-    const p = produtoRepository.getProdutoById(id);
+async function getProdutoById(id) {
+    const p = await produtoRepository.getProdutoById(id);
     if (!p) {
         const error = new Error("Produto não encontrado.");
         error.id = 404;
@@ -49,8 +64,8 @@ function getProdutoById(id) {
     return p;
 }
 
-function updateProduto(id, nome, categoriaId, fornecedorNome, preco) {
-    const updated = produtoRepository.updateProduto(id, nome, categoriaId, fornecedorNome, preco);
+async function updateProduto(id, nome, categoriaId, fornecedorNome, preco) {
+    const updated = await produtoRepository.updateProduto(id, nome, categoriaId, fornecedorNome, preco);
     if (!updated) {
         const error = new Error("Produto não encontrado.");
         error.id = 404;
@@ -59,8 +74,8 @@ function updateProduto(id, nome, categoriaId, fornecedorNome, preco) {
     return updated;
 }
 
-function deleteProduto(id) {
-    const removed = produtoRepository.deleteProduto(id);
+async function deleteProduto(id) {
+    const removed = await produtoRepository.deleteProduto(id);
     if (!removed) {
         const error = new Error("Produto não encontrada.");
         error.id = 404;

@@ -4,78 +4,83 @@ async function createConta(cliente_id, saldo) {
     const query = 'INSERT INTO contas (cliente_id, saldo) VALUES ($1, $2) RETURNING *';
     const values = [cliente_id, saldo];
     
+    let c = null;
     try {
-        const c = await pool.connect();
+        c = await pool.connect();
         const result = await c.query(query, values);
         return result.rows[0];
     } catch (error) {
         console.error('Error creating conta:', error);
         throw error;
     } finally {
-        c.release();
+        if (c) c.release();
     }
 }
 
 async function getContaById(id) {
-    const query = 'SELECT * FROM contas WHERE id = $1';
+    const query = 'SELECT * FROM contas WHERE id_conta = $1';
     const values = [id];
     
+    let c = null;
     try {
-        const c = await pool.connect();
+        c = await pool.connect();
         const result = await c.query(query, values);
         return result.rows[0];
     } catch (error) {
         console.error('Error fetching conta by id:', error);
         throw error;
     } finally {
-        c.release();
+        if (c) c.release();
     }
 }
 
 async function getAllContas() {
-    const query = 'SELECT * FROM contas ORDER BY id';
+    const query = 'SELECT * FROM contas ORDER BY id_conta';
     
+    let c = null;
     try {
-        const c = await pool.connect();
+        c = await pool.connect();
         const result = await c.query(query);
         return result.rows;
     } catch (error) {
         console.error('Error fetching contas:', error);
         throw error;
     } finally {
-        c.release();
+        if (c) c.release();
     }
 }
 
 async function updateConta(id, conta) {
-    const query = 'UPDATE contas SET cliente_id = $1, saldo = $2 WHERE id = $3 RETURNING *';
+    const query = 'UPDATE contas SET cliente_id = $1, saldo = $2 WHERE id_conta = $3 RETURNING *';
     const values = [conta.cliente_id, conta.saldo, id];
     
+    let c = null;
     try {
-        const c = await pool.connect();
+        c = await pool.connect();
         const result = await c.query(query, values);
         return result.rows[0] ? true : false;
     } catch (error) {
         console.error('Error updating conta:', error);
         throw error;
     } finally {
-        c.release();
+        if (c) c.release();
     }
 }
 
 async function deleteConta(id) {
-    const query = 'DELETE FROM contas WHERE id = $1';
+    const query = 'DELETE FROM contas WHERE id_conta = $1';
     const values = [id];
     
+    let c = null;
     try {
-        const c = await pool.connect();
+        c = await pool.connect();
         const result = await c.query(query, values);
         return result.rowCount > 0 ? true : false;
     } catch (error) {
         console.error('Error deleting conta:', error);
         throw error;
     } finally {
-        c.release();
+        if (c) c.release();
     }
 }
 
@@ -83,19 +88,20 @@ async function deleteConta(id) {
 async function depositAmount(id, valor) {
     const conta = await getContaById(id);
     if (conta && typeof valor === 'number' && valor > 0) {
-        const newSaldo = conta.saldo + valor;
-        const query = 'UPDATE contas SET saldo = $1 WHERE id = $2 RETURNING *';
+        const newSaldo = Number(conta.saldo) + Number(valor);
+        const query = 'UPDATE contas SET saldo = $1 WHERE id_conta = $2 RETURNING *';
         const values = [newSaldo, id];
         
+        let c = null;
         try {
-            const c = await pool.connect();
+            c = await pool.connect();
             const result = await c.query(query, values);
             return result.rows[0] ? true : false;
         } catch (error) {
             console.error('Error depositing amount:', error);
             throw error;
         } finally {
-            c.release();
+            if (c) c.release();
         }
     }
     return false;

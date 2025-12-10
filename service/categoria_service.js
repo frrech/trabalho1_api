@@ -1,20 +1,20 @@
 const categoriaRepository = require('../repository/categoria_repository');
 
-function createCategoria(nome, descricao) {
+async function createCategoria(nome, descricao) {
     if (!nome || nome.trim() === '') {
         const error = new Error("Nome da categoria é obrigatório.");
         error.id = 400;
         throw error;
     }
-    return categoriaRepository.addCategoria(nome, descricao || '');
+    return await categoriaRepository.createCategoria(nome, descricao || '');
 }
 
-function getAllCategorias() {
-    return categoriaRepository.getAllCategorias();
+async function getAllCategorias() {
+    return await categoriaRepository.getAllCategorias();
 }
 
-function getCategoriaById(id) {
-    const cat = categoriaRepository.getCategoriaById(id);
+async function getCategoriaById(id) {
+    const cat = await categoriaRepository.getCategoriaById(id);
     if (!cat) {
         const error = new Error("Categoria não encontrada.");
         error.id = 404;
@@ -23,8 +23,8 @@ function getCategoriaById(id) {
     return cat;
 }
 
-function updateCategoria(id, nome, descricao) {
-    const updated = categoriaRepository.updateCategoria(id, nome, descricao || '');
+async function updateCategoria(id, nome, descricao) {
+    const updated = await categoriaRepository.updateCategoria(id, nome, descricao || '');
     if (!updated) {
         const error = new Error("Categoria não encontrada.");
         error.id = 404;
@@ -33,8 +33,8 @@ function updateCategoria(id, nome, descricao) {
     return updated;
 }
 
-function deleteCategoria(id) {
-    const removed = categoriaRepository.deleteCategoria(id);
+async function deleteCategoria(id) {
+    const removed = await categoriaRepository.deleteCategoria(id);
     if (!removed) {
         const error = new Error("Categoria não encontrada.");
         error.id = 404;

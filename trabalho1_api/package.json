@@ -1,0 +1,19 @@
+{
+  "name": "trabalho1_api",
+  "version": "1.0.0",
+  "description": "API for managing suppliers, clients, accounts, users, sales, and products.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "author": "Your Name",
+  "license": "ISC"
+}

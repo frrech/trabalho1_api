@@ -16,7 +16,7 @@ async function createProduto(nome, categoriaId, fornecedorNome, preco) {
                  VALUES ($1, $2, $3, $4)
                  RETURNING id_produto AS id, nome, categoria_id AS "categoriaId", fornecedor_nome AS "fornecedorNome", preco`;
     const values = [nome, parseInt(categoriaId, 10), fornecedorNome, parseFloat(preco)];
-    let client;
+    let client = null;;
     try {
         client = await pool.connect();
         const res = await client.query(sql, values);
@@ -29,7 +29,7 @@ async function createProduto(nome, categoriaId, fornecedorNome, preco) {
 
 async function getAllProdutos() {
     const sql = `SELECT id_produto AS id, nome, categoria_id AS "categoriaId", fornecedor_nome AS "fornecedorNome", preco FROM produtos ORDER BY id_produto`;
-    let client;
+    let client = null;;
     try {
         client = await pool.connect();
         const res = await client.query(sql);
@@ -41,7 +41,7 @@ async function getAllProdutos() {
 
 async function getProdutoById(id) {
     const sql = `SELECT id_produto AS id, nome, categoria_id AS "categoriaId", fornecedor_nome AS "fornecedorNome", preco FROM produtos WHERE id_produto = $1`;
-    let client;
+    let client = null;
     try {
         client = await pool.connect();
         const res = await client.query(sql, [parseInt(id, 10)]);
@@ -59,7 +59,7 @@ async function updateProduto(id, nome, categoriaId, fornecedorNome, preco) {
                  WHERE id_produto = $1
                  RETURNING id_produto AS id, nome, categoria_id AS "categoriaId", fornecedor_nome AS "fornecedorNome", preco`;
     const values = [parseInt(id, 10), nome, parseInt(categoriaId, 10), fornecedorNome, parseFloat(preco)];
-    let client;
+    let client = null;;
     try {
         client = await pool.connect();
         const res = await client.query(sql, values);
@@ -73,7 +73,7 @@ async function updateProduto(id, nome, categoriaId, fornecedorNome, preco) {
 
 async function deleteProduto(id) {
     const sql = `DELETE FROM produtos WHERE id_produto = $1 RETURNING id_produto AS id, nome, categoria_id AS "categoriaId", fornecedor_nome AS "fornecedorNome", preco`;
-    let client;
+    let client = null;
     try {
         client = await pool.connect();
         const res = await client.query(sql, [parseInt(id, 10)]);

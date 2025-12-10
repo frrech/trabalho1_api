@@ -9,12 +9,12 @@ class Categoria {
     }
 }
 
-async function addCategoria(nome, descricao) {
+async function createCategoria(nome, descricao) {
     const sql = `INSERT INTO categorias (nome, descricao)
                  VALUES ($1, $2)
                  RETURNING id_categoria AS id, nome, descricao`;
     const values = [nome, descricao];
-    let client;
+    let client = null;
     try {
         client = await pool.connect();
         const res = await client.query(sql, values);
@@ -27,7 +27,7 @@ async function addCategoria(nome, descricao) {
 
 async function getAllCategorias() {
     const sql = `SELECT id_categoria AS id, nome, descricao FROM categorias ORDER BY id_categoria`;
-    let client;
+    let client = null;
     try {
         client = await pool.connect();
         const res = await client.query(sql);
@@ -39,7 +39,7 @@ async function getAllCategorias() {
 
 async function getCategoriaById(id) {
     const sql = `SELECT id_categoria AS id, nome, descricao FROM categorias WHERE id_categoria = $1`;
-    let client;
+    let client = null;
     try {
         client = await pool.connect();
         const res = await client.query(sql, [parseInt(id, 10)]);
@@ -57,7 +57,7 @@ async function updateCategoria(id, nome, descricao) {
                  WHERE id_categoria = $1
                  RETURNING id_categoria AS id, nome, descricao`;
     const values = [parseInt(id, 10), nome, descricao];
-    let client;
+    let client = null;
     try {
         client = await pool.connect();
         const res = await client.query(sql, values);
@@ -71,7 +71,7 @@ async function updateCategoria(id, nome, descricao) {
 
 async function deleteCategoria(id) {
     const sql = `DELETE FROM categorias WHERE id_categoria = $1 RETURNING id_categoria AS id, nome, descricao`;
-    let client;
+    let client = null;
     try {
         client = await pool.connect();
         const res = await client.query(sql, [parseInt(id, 10)]);
@@ -84,7 +84,7 @@ async function deleteCategoria(id) {
 }
 
 module.exports = {
-    addCategoria,
+    createCategoria,
     getAllCategorias,
     getCategoriaById,
     updateCategoria,

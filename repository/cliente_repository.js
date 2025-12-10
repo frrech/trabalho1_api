@@ -1,7 +1,7 @@
 const pool = require('../db.js')
 
 async function createCliente(cliente) {
-    const query = 'INSERT INTO cliente (nome, email, matricula) VALUES ($1, $2, $3) RETURNING id AS id, nome, email, matricula';
+    const query = 'INSERT INTO cliente (nome, email, matricula) VALUES ($1, $2, $3) RETURNING id_cliente AS id, nome, email, matricula';
     const values = [cliente.nome, cliente.email, cliente.matricula];
     let client;
 
@@ -18,7 +18,7 @@ async function createCliente(cliente) {
 }
 
 async function getAllClientes() {
-    const query = 'SELECT id AS id, nome, email, matricula FROM cliente ORDER BY id';
+    const query = 'SELECT id AS id_cliente, nome, email, matricula FROM cliente ORDER BY id_cliente';
     let client;
 
     try {
@@ -34,7 +34,7 @@ async function getAllClientes() {
 }
 
 async function getClienteById(id) {
-    const query = 'SELECT id AS id, nome, email, matricula FROM cliente WHERE id = $1';
+    const query = 'SELECT id AS id_cliente, nome, email, matricula FROM cliente WHERE id_cliente = $1';
     const values = [parseInt(id, 10)];
     let client;
 
@@ -51,7 +51,7 @@ async function getClienteById(id) {
 }
 
 async function updateCliente(id, cliente) {
-    const query = 'UPDATE cliente SET nome = $1, email = $2, matricula = $3 WHERE id = $4 RETURNING id';
+    const query = 'UPDATE cliente SET nome = $1, email = $2, matricula = $3 WHERE id_cliente = $4 RETURNING id_cliente';
     const values = [cliente.nome, cliente.email, cliente.matricula, parseInt(id, 10)];
     let client;
 
@@ -68,7 +68,7 @@ async function updateCliente(id, cliente) {
 }
 
 async function deleteCliente(id) {
-    const query = 'DELETE FROM cliente WHERE id = $1';
+    const query = 'DELETE FROM cliente WHERE id_cliente = $1';
     const values = [parseInt(id, 10)];
     let client;
 
